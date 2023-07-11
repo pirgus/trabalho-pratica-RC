@@ -49,7 +49,8 @@ int main(int argc, const char** argv){
         ssize_t received_bytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0, (sockaddr*)&serverAddress, &serverAddressLength);
         std::string receivedMessage(buffer, received_bytes);
         std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
-        int compare = strcmp(message, buffer);
+        int compare = strcmp(receivedMessage.c_str(), message);
+        std::cout << "Valor da comparaçao = " << compare << std::endl;
         if(compare == 0){
             std::cout << "Pacote UDP " << count << " enviado com sucesso" << std::endl;
             count++;

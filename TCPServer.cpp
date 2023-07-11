@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <cstring>
 
-int main() {
+int main(int argc, const char** argv) {
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {

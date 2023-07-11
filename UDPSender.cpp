@@ -27,7 +27,7 @@ int main(int argc, const char** argv){
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(9876);
-    serverAddress.sin_addr.s_addr = inet_addr("10.81.71.220");
+    serverAddress.sin_addr.s_addr = inet_addr("10.81.77.3");
 
     size_t readed_bytes = 0;
     char* message = (char*)malloc(BLOCK_TO_SEND * sizeof(char));
@@ -91,6 +91,7 @@ int main(int argc, const char** argv){
 
     close(udpSocket);
     file_to_send.close();
+    free(message);
 
     return 0;
 }

@@ -52,9 +52,8 @@ int main(int argc, const char** argv) {
         std::cout << "Pacote UDP recebido: " << receivedData << std::endl;
         file_to_receive.write(buffer, BLOCK_SIZE);
 
-        // Responder ao cliente (opcional)
-        const char* response = "Recebi seu arquivo";
-        ssize_t sentBytes = sendto(udpSocket, response, strlen(response), 0,
+        // Responder ao cliente com os dados que recebeu
+        ssize_t sentBytes = sendto(udpSocket, buffer, strlen(buffer), 0,
                                    (const sockaddr*)&clientAddress, sizeof(clientAddress));
         if (sentBytes < 0) {
             std::cerr << "Falha ao enviar a resposta UDP" << std::endl;

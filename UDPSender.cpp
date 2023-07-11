@@ -42,9 +42,6 @@ int main(int argc, const char** argv){
             return 1;
         }
 
-        std::cout << "Pacote UDP " << count << " enviado com sucesso" << std::endl;
-        count++;
-        readed_bytes += 100;
         char buffer[BLOCK_TO_SEND];
 
         socklen_t serverAddressLength = sizeof(serverAddress);
@@ -52,6 +49,19 @@ int main(int argc, const char** argv){
         ssize_t received_bytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0, (sockaddr*)&serverAddress, &serverAddressLength);
         std::string receivedMessage(buffer, received_bytes);
         std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
+        int compare = strcmp(message, buffer);
+        if(compare == 0){
+            std::cout << "Pacote UDP " << count << " enviado com sucesso" << std::endl;
+            count++;
+            readed_bytes += 100;
+        }
+        else{
+            // pacote nao foi enviado corretamente
+            std::cout << "Nao foi possível enviar o pacote, tentando novamente...\n";
+            // volta o ponteiro do arquivo para no reinício do laço tentar enviar de novo
+            size_t go_back = size_t(file_to_send.tellg()) - 100;
+            file_to_send.seekg(go_back);
+        }
     }
 
     // enviar o que sobrou pois a divisão por 100 não é inteira

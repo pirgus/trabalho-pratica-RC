@@ -3,8 +3,15 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cstring>
+#include <fstream>
 
-int main() {
+const size_t BLOCK_SIZE = 100;
+
+int main(int argc, const char** argv) {
+
+    std::ofstream file_to_receive;
+    file_to_receive.open(argv[1]);
+
     // Criar o socket UDP
     int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (udpSocket < 0) {
@@ -26,7 +33,7 @@ int main() {
     }
 
     // Buffer para armazenar os dados recebidos
-    char buffer[1024];
+    char buffer[BLOCK_SIZE];
 
     while (true) {
         // Aguardar a chegada de pacotes UDP
@@ -43,9 +50,10 @@ int main() {
         // Processar os dados recebidos
         std::string receivedData(buffer, receivedBytes);
         std::cout << "Pacote UDP recebido: " << receivedData << std::endl;
+        file_to_receive.write(buffer, BLOCK_SIZE);
 
         // Responder ao cliente (opcional)
-        const char* response = "Hello, UDP client!";
+        const char* response = "Recebi seu arquivo";
         ssize_t sentBytes = sendto(udpSocket, response, strlen(response), 0,
                                    (const sockaddr*)&clientAddress, sizeof(clientAddress));
         if (sentBytes < 0) {
@@ -57,6 +65,7 @@ int main() {
 
     // Fechar o socket
     close(udpSocket);
+    file_to_receive.close();
 
     return 0;
 }

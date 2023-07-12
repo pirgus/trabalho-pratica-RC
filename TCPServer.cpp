@@ -11,7 +11,7 @@ int main(int argc, const char** argv) {
 
     std::ofstream file_received(argv[1], std::ios::binary);
     file_received.seekp(std::ios::beg);
-    
+
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {
@@ -73,10 +73,16 @@ int main(int argc, const char** argv) {
             close(tcpSocket);
             return 1;
         }
+        else if(receivedBytes == 0){
+            std::cout << "Comunicacao encerrada\n";
+            close(clientSocket);
+            close(tcpSocket);
+            return 0;
+        }
 
         // Processar os dados recebidos
         std::string receivedData(buffer, receivedBytes);
-        std::cout << "Dados TCP recebidos: " << receivedData << std::endl;
+        //std::cout << "Dados TCP recebidos: " << receivedData << std::endl;
         file_received.write(receivedData.c_str(), BLOCK_SIZE);
 
         // Enviar uma resposta ao cliente (opcional)
@@ -90,10 +96,11 @@ int main(int argc, const char** argv) {
         // }
 
         // Fechar o socket do cliente
-        close(clientSocket);
+        
     }
 
     // Fechar o socket
+    close(clientSocket);
     close(tcpSocket);
     file_received.close();
 

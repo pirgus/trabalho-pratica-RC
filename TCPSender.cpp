@@ -60,6 +60,16 @@ int main(int argc, const char** argv) {
         readed_bytes += 100;
     }
 
+    // enviar o que sobrou pois a divisão por 100 não é inteira
+    file.read(buffer, file_size - readed_bytes);
+    ssize_t sentBytes = send(tcpSocket, buffer, file_size - readed_bytes, 0);
+    if(sentBytes < 0){
+        std::cerr << "Falha ao enviar o último pacote TCP" << std::endl;
+        close(tcpSocket);
+        return 1;
+    }
+    // std::cout << "Pacote UDP " << count << " enviado com sucesso" << std::endl;
+
     // // Enviar o tamanho do arquivo para o servidor
     // ssize_t sentBytes = send(tcpSocket, &file_size, sizeof(file_size), 0);
     // if (sentBytes < 0) {

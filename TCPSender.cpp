@@ -51,7 +51,7 @@ int main(int argc, const char** argv) {
 
     while(file_size - readed_bytes > 100){
         file.read(buffer, sizeof(buffer));
-        ssize_t sent_bytes = send(tcpSocket, buffer, sizeof(buffer), 0);
+        ssize_t sent_bytes = send(tcpSocket, buffer, BLOCK_SIZE, 0);
         if(sent_bytes < 0){
             std::cerr << "Falha ao enviar o pacote TCP" << std::endl;
             size_t go_back = size_t(file.tellg()) - 100;

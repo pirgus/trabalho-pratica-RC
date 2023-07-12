@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 
 # Lista dos arquivos .cpp a serem compilados
-SOURCES = UDPSender.cpp UDPServer.cpp TCPSender.cpp TCPServer.cpp
+SOURCES = UDPSender.cpp UDPServer.cpp TCPSender.cpp TCPServer.cpp TCPServerwt.cpp
 
 # Gera os nomes dos executáveis a partir dos nomes dos arquivos .cpp
 EXECUTABLES = $(SOURCES:.cpp=)

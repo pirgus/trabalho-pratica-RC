@@ -37,7 +37,7 @@ int main(int argc, const char** argv) {
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(9876); // Número da porta de destino
-    serverAddress.sin_addr.s_addr = inet_addr("10.0.0.176"); // Endereço IP de destino
+    serverAddress.sin_addr.s_addr = inet_addr("10.0.0.178"); // Endereço IP de destino
 
     // Conectar ao servidor
     if (connect(tcpSocket, (const sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {

@@ -9,7 +9,7 @@ const size_t BLOCK_SIZE = 100;
 
 int main(int argc, const char** argv) {
 
-    std::ofstream file_received(argv[1], std::ios::binary);
+    std::ofstream file_received(argv[1], std::ios::in | std::ios::out);
     file_received.seekp(std::ios::beg);
 
     // Criar o socket TCP
@@ -66,7 +66,7 @@ int main(int argc, const char** argv) {
         char buffer[BLOCK_SIZE];
 
         // Receber dados do cliente
-        ssize_t receivedBytes = recv(clientSocket, buffer, BLOCK_SIZE, 0);
+        ssize_t receivedBytes = recv(clientSocket, buffer, sizeof(buffer), 0);
         if (receivedBytes < 0) {
             std::cerr << "Falha ao receber os dados TCP" << std::endl;
             close(clientSocket);
@@ -83,7 +83,7 @@ int main(int argc, const char** argv) {
         // Processar os dados recebidos
         std::string receivedData(buffer, receivedBytes);
         //std::cout << "Dados TCP recebidos: " << receivedData << std::endl;
-        file_received.write(receivedData.c_str(), BLOCK_SIZE);
+        file_received.write(receivedData.c_str(), sizeof(buffer));
 
         // Enviar uma resposta ao cliente (opcional)
         // const char* response = "Hello, TCP client!";

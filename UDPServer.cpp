@@ -10,7 +10,7 @@ const size_t BLOCK_SIZE = 100;
 int main(int argc, const char** argv) {
 
     std::ofstream file_to_receive;
-    file_to_receive.open(argv[1]);
+    file_to_receive.open(argv[1], std::ios::in | std::ios::out);
 
     // Criar o socket UDP
     int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);

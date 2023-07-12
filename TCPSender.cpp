@@ -48,6 +48,10 @@ int main(int argc, const char** argv) {
             //close(tcpSocket);
             //return 1;
         }
+        else{
+            count++;
+            readed_bytes += 100;
+        }
 
         char buffer[BLOCK_TO_SEND];
 
@@ -56,7 +60,6 @@ int main(int argc, const char** argv) {
         // ssize_t received_bytes = recv(tcpSocket, buffer, sizeof(buffer), 0);
         // std::string receivedMessage(buffer, received_bytes);
         // std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
-        count++;
     }
 
     // enviar o que sobrou pois a divisão por 100 não é inteira

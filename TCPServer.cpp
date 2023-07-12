@@ -10,7 +10,8 @@ const size_t BLOCK_SIZE = 100;
 int main(int argc, const char** argv) {
 
     std::ofstream file_to_receive;
-    file_to_receive.open(argv[1]);
+    file_to_receive.open(argv[1], std::ios::binary);
+    file_to_receive.seekp(0);
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {

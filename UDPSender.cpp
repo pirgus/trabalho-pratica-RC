@@ -6,7 +6,7 @@
 #include <fstream>
 #include <cstring>
 
-const int BLOCK_TO_SEND = 100;
+const int BLOCK_TO_SEND = 1000;
 
 int main(int argc, const char** argv){
 
@@ -27,13 +27,13 @@ int main(int argc, const char** argv){
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(9876);
-    serverAddress.sin_addr.s_addr = inet_addr("10.81.71.220");
+    serverAddress.sin_addr.s_addr = inet_addr("10.81.112.120");
 
     size_t readed_bytes = 0;
     char* message = (char*)malloc(BLOCK_TO_SEND * sizeof(char));
     int count = 0;
 
-    while(file_size - readed_bytes > 100){
+    while(file_size - readed_bytes > BLOCK_TO_SEND){
         file_to_send.read(message, BLOCK_TO_SEND);
         ssize_t sentBytes = sendto(udpSocket, message, BLOCK_TO_SEND, 0, (const sockaddr*)&serverAddress, sizeof(serverAddress));
         if(sentBytes < 0){
@@ -46,6 +46,11 @@ int main(int argc, const char** argv){
 
         socklen_t serverAddressLength = sizeof(serverAddress);
 
+        // incrementando aqui enquanto não há garantia de entrega
+        count++;
+        readed_bytes += BLOCK_TO_SEND;
+        // ------------------------------------------------------
+
 
         // -------------- garantia de entrega
         // ssize_t received_bytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0, (sockaddr*)&serverAddress, &serverAddressLength);
@@ -56,13 +61,13 @@ int main(int argc, const char** argv){
         // if(compare == 0){
         //     // std::cout << "Pacote UDP " << count << " enviado com sucesso" << std::endl;
         //     count++;
-        //     readed_bytes += 100;
+        //     readed_bytes += BLOCK_TO_SEND;
         // }
         // else{
         //     // pacote nao foi enviado corretamente
         //     // std::cout << "Nao foi possível enviar o pacote, tentando novamente...\n";
         //     // volta o ponteiro do arquivo para no reinício do laço tentar enviar de novo
-        //     size_t go_back = size_t(file_to_send.tellg()) - 100;
+        //     size_t go_back = size_t(file_to_send.tellg()) - BLOCK_TO_SEND;
         //     file_to_send.seekg(go_back);
         // }
         // -------------------------------------

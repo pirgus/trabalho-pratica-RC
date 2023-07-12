@@ -5,19 +5,19 @@
 #include <unistd.h>
 #include <fstream>
 
-const size_t BLOCK_SIZE = 100;
+const size_t BLOCK_SIZE = 500;
 
 int main(int argc, const char** argv) {
     // Verificar se o nome do arquivo foi fornecido como argumento de linha de comando
     if (argc != 2) {
-        std::cerr << "Uso: ./TCPSender <nome_arquivo>" << std::endl;
+        // std::cerr << "Uso: ./TCPSender <nome_arquivo>" << std::endl;
         return 1;
     }
 
     // Abrir o arquivo para leitura
     std::ifstream file(argv[1], std::ios::binary);
     if (!file) {
-        // std::cerr << "Falha ao abrir o arquivo" << std::endl;
+        //  std::cerr << "Falha ao abrir o arquivo" << std::endl;
         return 1;
     }
 
@@ -29,7 +29,7 @@ int main(int argc, const char** argv) {
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {
-        // std::cerr << "Falha ao criar o socket TCP" << std::endl;
+        //  std::cerr << "Falha ao criar o socket TCP" << std::endl;
         return 1;
     }
 
@@ -37,11 +37,11 @@ int main(int argc, const char** argv) {
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(9876); // Número da porta de destino
-    serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1"); // Endereço IP de destino
+    serverAddress.sin_addr.s_addr = inet_addr("10.0.0.176"); // Endereço IP de destino
 
     // Conectar ao servidor
     if (connect(tcpSocket, (const sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
-        // std::cerr << "Falha ao conectar ao servidor TCP" << std::endl;
+        //  std::cerr << "Falha ao conectar ao servidor TCP" << std::endl;
         close(tcpSocket);
         return 1;
     }
@@ -50,29 +50,31 @@ int main(int argc, const char** argv) {
     char buffer[BLOCK_SIZE];
     int count = 0;
 
-    while(file_size - readed_bytes > 100){
+    while(file_size - readed_bytes > BLOCK_SIZE){
         file.read(buffer, sizeof(buffer));
         ssize_t sent_bytes = send(tcpSocket, buffer, BLOCK_SIZE, 0);
         if(sent_bytes < 0){
             // std::cerr << "Falha ao enviar o pacote TCP" << std::endl;
-            size_t go_back = size_t(file.tellg()) - 100;
+            size_t go_back = size_t(file.tellg()) - BLOCK_SIZE;
             file.seekg(go_back);
         }
         else{
-            readed_bytes += 100;
+            readed_bytes += BLOCK_SIZE;
             count++;
         }
+        std::cout << "sent bytes = " << sent_bytes << std::endl;
     }
 
     // enviar o que sobrou pois a divisão por 100 não é inteira
     file.read(buffer, file_size - readed_bytes);
     ssize_t sentBytes = send(tcpSocket, buffer, file_size - readed_bytes, 0);
     if(sentBytes < 0){
-        // std::cerr << "Falha ao enviar o último pacote TCP" << std::endl;
-        close(tcpSocket);
-        return 1;
+        //  std::cerr << "Falha ao enviar o último pacote TCP" << std::endl;
+        // close(tcpSocket);
+        // return 1;
     }
     count++;
+    // std::cout << "chegou aqui antes do count\n";
     printf("%d", count);
     // std::cout << "Pacote UDP " << count << " enviado com sucesso" << std::endl;
 

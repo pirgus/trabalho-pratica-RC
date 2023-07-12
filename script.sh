@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nome do programa a ser executado
-program="./UDPSender ../arquivo_100M.txt"
+program="./TCPSender ../arquivo_100M.txt"
 
 # Nome do arquivo de saída
 output_file="output.txt"
@@ -27,7 +27,7 @@ do
     echo "Tempo de execução: $execution_time ms"
     
     # Escreve o tempo de execução no arquivo junto com a saída do programa
-    echo "$execution_time, " >> "$output_file"
+    echo -n "$execution_time, " >> "$output_file"
     #echo "" >> "$output_file"
     #echo "" >> "$output_file"
     cat temp_output.txt >> "$output_file"

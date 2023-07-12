@@ -56,14 +56,14 @@ int main(int argc, const char** argv) {
 
         // std::cout << "Enviando pacote de resposta\n";
         // Responder ao cliente com os dados que recebeu
-        ssize_t sentBytes = sendto(udpSocket, buffer, strlen(buffer), 0,
-                                   (sockaddr*)&clientAddress, sizeof(clientAddress));
-        // std::cout << "Enviei resposta\n";
-        if (sentBytes < 0) {
-            // std::cerr << "Falha ao enviar a resposta UDP" << std::endl;
-            close(udpSocket);
-            return 1;
-        }
+        // ssize_t sentBytes = sendto(udpSocket, buffer, strlen(buffer), 0,
+        //                            (sockaddr*)&clientAddress, sizeof(clientAddress));
+        // // std::cout << "Enviei resposta\n";
+        // if (sentBytes < 0) {
+        //     // std::cerr << "Falha ao enviar a resposta UDP" << std::endl;
+        //     close(udpSocket);
+        //     return 1;
+        // }
     }
 
     // Fechar o socket

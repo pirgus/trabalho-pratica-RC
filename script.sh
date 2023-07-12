@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Nome do programa a ser executado
-program="./UDPSender arquivo_100M.txt"
+program="./UDPSender ../arquivo_100M.txt"
 
 # Nome do arquivo de saída
 output_file="output.txt"

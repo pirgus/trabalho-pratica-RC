@@ -10,12 +10,12 @@ const size_t BLOCK_SIZE = 100;
 int main(int argc, const char** argv) {
 
     std::ofstream file_to_receive;
-    file_to_receive.open(argv[1], std::ios::in | std::ios::out);
+    file_to_receive.open(argv[1], std::ios::out | std::ios::binary);
 
     // Criar o socket UDP
     int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (udpSocket < 0) {
-        std::cerr << "Falha ao criar o socket UDP" << std::endl;
+        // std::cerr << "Falha ao criar o socket UDP" << std::endl;
         return 1;
     }
 
@@ -27,7 +27,7 @@ int main(int argc, const char** argv) {
 
     // Vincular o socket à porta do servidor
     if (bind(udpSocket, (const sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
-        std::cerr << "Falha ao vincular o socket UDP ao servidor" << std::endl;
+        // std::cerr << "Falha ao vincular o socket UDP ao servidor" << std::endl;
         close(udpSocket);
         return 1;
     }
@@ -44,7 +44,7 @@ int main(int argc, const char** argv) {
                                          (sockaddr*)&clientAddress, &clientAddressLength);
         // std::cout << "Buffer recebido: " << buffer << std::endl;
         if (receivedBytes < 0) {
-            std::cerr << "Falha ao receber o pacote UDP" << std::endl;
+            // std::cerr << "Falha ao receber o pacote UDP" << std::endl;
             close(udpSocket);
             return 1;
         }
@@ -54,13 +54,13 @@ int main(int argc, const char** argv) {
         // std::cout << "Pacote UDP recebido: " << receivedData << std::endl;
         file_to_receive.write(buffer, BLOCK_SIZE);
 
-        std::cout << "Enviando pacote de resposta\n";
+        // std::cout << "Enviando pacote de resposta\n";
         // Responder ao cliente com os dados que recebeu
         ssize_t sentBytes = sendto(udpSocket, buffer, strlen(buffer), 0,
                                    (sockaddr*)&clientAddress, sizeof(clientAddress));
         // std::cout << "Enviei resposta\n";
         if (sentBytes < 0) {
-            std::cerr << "Falha ao enviar a resposta UDP" << std::endl;
+            // std::cerr << "Falha ao enviar a resposta UDP" << std::endl;
             close(udpSocket);
             return 1;
         }

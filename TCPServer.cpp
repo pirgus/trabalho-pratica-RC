@@ -9,13 +9,13 @@ const size_t BLOCK_SIZE = 100;
 
 int main(int argc, const char** argv) {
 
-    std::ofstream file_received(argv[1], std::ios::in | std::ios::out);
+    std::ofstream file_received(argv[1], std::ios::out | std::ios::binary);
     file_received.seekp(std::ios::beg);
 
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {
-        std::cerr << "Falha ao criar o socket TCP" << std::endl;
+        // std::cerr << "Falha ao criar o socket TCP" << std::endl;
         return 1;
     }
 
@@ -27,14 +27,14 @@ int main(int argc, const char** argv) {
 
     // Vincular o socket à porta do servidor
     if (bind(tcpSocket, (const sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
-        std::cerr << "Falha ao vincular o socket TCP ao servidor" << std::endl;
+        // std::cerr << "Falha ao vincular o socket TCP ao servidor" << std::endl;
         close(tcpSocket);
         return 1;
     }
 
     // Ouvir por conexões de clientes
     if (listen(tcpSocket, 5) < 0) { // Permitir até 5 conexões pendentes
-        std::cerr << "Falha ao ouvir por conexões TCP" << std::endl;
+        // std::cerr << "Falha ao ouvir por conexões TCP" << std::endl;
         close(tcpSocket);
         return 1;
     }
@@ -44,13 +44,15 @@ int main(int argc, const char** argv) {
     socklen_t clientAddressLength = sizeof(clientAddress);
     int clientSocket = accept(tcpSocket, (sockaddr*)&clientAddress, &clientAddressLength);
     if (clientSocket < 0) {
-        std::cerr << "Falha ao aceitar a conexão TCP" << std::endl;
+        // std::cerr << "Falha ao aceitar a conexão TCP" << std::endl;
         close(tcpSocket);
         return 1;
     }
 
 
-
+    file_received.seekp(0);
+    int bytes_100 = 0;
+    int bytes_n_100 = 0; 
     while (true) {
         // // Aceitar uma conexão de cliente
         // sockaddr_in clientAddress{};
@@ -67,23 +69,30 @@ int main(int argc, const char** argv) {
 
         // Receber dados do cliente
         ssize_t receivedBytes = recv(clientSocket, buffer, sizeof(buffer), 0);
+        sleep(0.1);
         if (receivedBytes < 0) {
-            std::cerr << "Falha ao receber os dados TCP" << std::endl;
+            // std::cerr << "Falha ao receber os dados TCP" << std::endl;
             close(clientSocket);
             close(tcpSocket);
             return 1;
         }
         else if(receivedBytes == 0){
-            std::cout << "Comunicacao encerrada\n";
+            // std::cout << "Comunicacao encerrada\n";
             close(clientSocket);
             close(tcpSocket);
-            return 0;
+            // return 0;
+            break;
         }
 
+        if(receivedBytes != 100)
+            // std::cout << "Bytes recebidos == " << receivedBytes << std::endl;
+            bytes_n_100 += receivedBytes;
+        else
+            bytes_100 += 100;
+
         // Processar os dados recebidos
-        std::string receivedData(buffer, receivedBytes);
         //std::cout << "Dados TCP recebidos: " << receivedData << std::endl;
-        file_received.write(receivedData.c_str(), sizeof(buffer));
+        file_received.write(buffer, receivedBytes);
 
         // Enviar uma resposta ao cliente (opcional)
         // const char* response = "Hello, TCP client!";
@@ -98,6 +107,8 @@ int main(int argc, const char** argv) {
         // Fechar o socket do cliente
         
     }
+
+    // std::cout << "Bytes 100 total = " << bytes_100 << "\nBytes nao 100 = " << bytes_n_100 << std::endl;
 
     // Fechar o socket
     close(clientSocket);

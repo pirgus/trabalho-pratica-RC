@@ -43,8 +43,10 @@ int main(int argc, const char** argv) {
         ssize_t sentBytes = send(tcpSocket, message, BLOCK_TO_SEND, 0);
         if(sentBytes < 0){
             std::cerr << "Falha ao enviar pacote TCP" << std::endl;
-            close(tcpSocket);
-            return 1;
+            size_t go_back = size_t(file_to_send.tellg()) - 100;
+            file_to_send.seekg(go_back);
+            //close(tcpSocket);
+            //return 1;
         }
 
         char buffer[BLOCK_TO_SEND];
@@ -54,6 +56,7 @@ int main(int argc, const char** argv) {
         // ssize_t received_bytes = recv(tcpSocket, buffer, sizeof(buffer), 0);
         // std::string receivedMessage(buffer, received_bytes);
         // std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
+        count++;
     }
 
     // enviar o que sobrou pois a divisão por 100 não é inteira

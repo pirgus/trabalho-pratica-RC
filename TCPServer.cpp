@@ -3,10 +3,14 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <cstring>
+#include <fstream>
 
 const size_t BLOCK_SIZE = 100;
 
 int main(int argc, const char** argv) {
+
+    std::ofstream file_to_receive;
+    file_to_receive.open(argv[1]);
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (tcpSocket < 0) {
@@ -56,6 +60,7 @@ int main(int argc, const char** argv) {
             return 1;
         }
         
+        file_to_receive.write(buffer, BLOCK_SIZE);
 
         // Receber dados do cliente
         
@@ -80,6 +85,7 @@ int main(int argc, const char** argv) {
 
     // Fechar o socket
     close(tcpSocket);
+    file_to_receive.close();
 
     return 0;
 }

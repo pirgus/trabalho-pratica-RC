@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <cstring>
 
+const size_t BLOCK_SIZE = 100;
+
 int main(int argc, const char** argv) {
     // Criar o socket TCP
     int tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -44,9 +46,8 @@ int main(int argc, const char** argv) {
         }
 
         // Buffer para armazenar os dados recebidos
-        char buffer[1024];
+        char buffer[BLOCK_SIZE];
 
-        // Receber dados do cliente
         ssize_t receivedBytes = recv(clientSocket, buffer, sizeof(buffer), 0);
         if (receivedBytes < 0) {
             std::cerr << "Falha ao receber os dados TCP" << std::endl;
@@ -54,20 +55,24 @@ int main(int argc, const char** argv) {
             close(tcpSocket);
             return 1;
         }
+        
+
+        // Receber dados do cliente
+        
 
         // Processar os dados recebidos
         std::string receivedData(buffer, receivedBytes);
         std::cout << "Dados TCP recebidos: " << receivedData << std::endl;
 
-        // Enviar uma resposta ao cliente (opcional)
-        const char* response = "Hello, TCP client!";
-        ssize_t sentBytes = send(clientSocket, response, strlen(response), 0);
-        if (sentBytes < 0) {
-            std::cerr << "Falha ao enviar a resposta TCP" << std::endl;
-            close(clientSocket);
-            close(tcpSocket);
-            return 1;
-        }
+        // // Enviar uma resposta ao cliente (opcional)
+        // const char* response = "Hello, TCP client!";
+        // ssize_t sentBytes = send(clientSocket, response, strlen(response), 0);
+        // if (sentBytes < 0) {
+        //     std::cerr << "Falha ao enviar a resposta TCP" << std::endl;
+        //     close(clientSocket);
+        //     close(tcpSocket);
+        //     return 1;
+        // }
 
         // Fechar o socket do cliente
         close(clientSocket);

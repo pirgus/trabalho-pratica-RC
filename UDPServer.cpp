@@ -39,22 +39,26 @@ int main(int argc, const char** argv) {
         // Aguardar a chegada de pacotes UDP
         sockaddr_in clientAddress{};
         socklen_t clientAddressLength = sizeof(clientAddress);
+        //std::cout << "Antes de receber\n";
         ssize_t receivedBytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0,
                                          (sockaddr*)&clientAddress, &clientAddressLength);
+        // std::cout << "Buffer recebido: " << buffer << std::endl;
         if (receivedBytes < 0) {
             std::cerr << "Falha ao receber o pacote UDP" << std::endl;
             close(udpSocket);
             return 1;
         }
-
+        // std::cout << "Pacote recebido\n";
         // Processar os dados recebidos
         std::string receivedData(buffer, receivedBytes);
-        std::cout << "Pacote UDP recebido: " << receivedData << std::endl;
+        // std::cout << "Pacote UDP recebido: " << receivedData << std::endl;
         file_to_receive.write(buffer, BLOCK_SIZE);
 
+        std::cout << "Enviando pacote de resposta\n";
         // Responder ao cliente com os dados que recebeu
         ssize_t sentBytes = sendto(udpSocket, buffer, strlen(buffer), 0,
-                                   (const sockaddr*)&clientAddress, sizeof(clientAddress));
+                                   (sockaddr*)&clientAddress, sizeof(clientAddress));
+        // std::cout << "Enviei resposta\n";
         if (sentBytes < 0) {
             std::cerr << "Falha ao enviar a resposta UDP" << std::endl;
             close(udpSocket);

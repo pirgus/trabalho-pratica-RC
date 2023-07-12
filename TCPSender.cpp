@@ -40,7 +40,7 @@ int main(int argc, const char** argv) {
 
     while(file_size - readed_bytes > 100){
         file_to_send.read(message, BLOCK_TO_SEND);
-        ssize_t sentBytes = sendto(tcpSocket, message, BLOCK_TO_SEND, 0, (const sockaddr*)&serverAddress, sizeof(serverAddress));
+        ssize_t sentBytes = send(tcpSocket, message, BLOCK_TO_SEND, 0);
         if(sentBytes < 0){
             std::cerr << "Falha ao enviar pacote TCP" << std::endl;
             close(tcpSocket);
@@ -51,14 +51,14 @@ int main(int argc, const char** argv) {
 
         socklen_t serverAddressLength = sizeof(serverAddress);
 
-        ssize_t received_bytes = recvfrom(tcpSocket, buffer, sizeof(buffer), 0, (sockaddr*)&serverAddress, &serverAddressLength);
-        std::string receivedMessage(buffer, received_bytes);
-        std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
+        // ssize_t received_bytes = recv(tcpSocket, buffer, sizeof(buffer), 0);
+        // std::string receivedMessage(buffer, received_bytes);
+        // std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
     }
 
     // enviar o que sobrou pois a divisão por 100 não é inteira
     file_to_send.read(message, file_size - readed_bytes);
-    ssize_t sentBytes = sendto(tcpSocket, message, file_size - readed_bytes, 0, (const sockaddr*)&serverAddress, sizeof(serverAddress));
+    ssize_t sentBytes = send(tcpSocket, message, file_size - readed_bytes, 0);
     if(sentBytes < 0){
         std::cerr << "Falha ao enviar pacote TCP" << std::endl;
         close(tcpSocket);
@@ -71,6 +71,7 @@ int main(int argc, const char** argv) {
     // Fechar o socket
     close(tcpSocket);
     file_to_send.close();
+    free(message);
 
     return 0;
 }

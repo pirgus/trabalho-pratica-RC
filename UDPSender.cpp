@@ -13,7 +13,7 @@ int main(int argc, const char** argv){
     const std::string file_name(argv[1]);
     std::ifstream file_to_send(file_name, std::ios::binary | std::ios::ate);
     size_t file_size = file_to_send.tellg();
-    std::cout << "file size = " << file_size << std::endl;
+    //std::cout << "file size = " << file_size << std::endl;
     file_to_send.seekg(0);
 
     // criando socket udp
@@ -27,7 +27,7 @@ int main(int argc, const char** argv){
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(9876);
-    serverAddress.sin_addr.s_addr = inet_addr("10.81.77.3");
+    serverAddress.sin_addr.s_addr = inet_addr("10.81.71.220");
 
     size_t readed_bytes = 0;
     char* message = (char*)malloc(BLOCK_TO_SEND * sizeof(char));
@@ -48,7 +48,7 @@ int main(int argc, const char** argv){
 
         ssize_t received_bytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0, (sockaddr*)&serverAddress, &serverAddressLength);
         std::string receivedMessage(buffer, received_bytes);
-        std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
+        //std::cout << "Mensagem recebida: " << receivedMessage << std::endl;
         int compare = strcmp(receivedMessage.c_str(), message);
         std::cout << "Valor da comparaçao = " << compare << std::endl;
         if(compare == 0){

@@ -7,7 +7,7 @@ program="./TCPSender ../arquivo_100M.txt"
 output_file="output.txt"
 
 # Executa o programa 10 vezes
-for ((i=1; i<=10; i++))
+for ((i=0; i<=1; i++))
 do
     echo "Execução $i:"
     

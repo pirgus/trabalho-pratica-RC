@@ -37,7 +37,7 @@ int main(int argc, const char** argv) {
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(9876); // Número da porta de destino
-    serverAddress.sin_addr.s_addr = inet_addr("10.0.0.178"); // Endereço IP de destino
+    serverAddress.sin_addr.s_addr = inet_addr("10.81.112.120"); // Endereço IP de destino
 
     // Conectar ao servidor
     if (connect(tcpSocket, (const sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
@@ -62,7 +62,7 @@ int main(int argc, const char** argv) {
             readed_bytes += BLOCK_SIZE;
             count++;
         }
-        std::cout << "sent bytes = " << sent_bytes << std::endl;
+        //std::cout << "sent bytes = " << sent_bytes << std::endl;
     }
 
     // enviar o que sobrou pois a divisão por 100 não é inteira

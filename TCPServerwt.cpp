@@ -51,6 +51,7 @@ int main(int argc, const char** argv) {
 
     file_received.seekp(0);
 
+    
     while (true) {
         // Buffer para armazenar os dados recebidos
         char buffer[BLOCK_SIZE];

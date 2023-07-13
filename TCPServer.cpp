@@ -39,19 +39,27 @@ int main(int argc, const char** argv) {
         return 1;
     }
 
-    while (true) {
-        // Aceitar uma conexão de cliente
-        sockaddr_in clientAddress{};
-        socklen_t clientAddressLength = sizeof(clientAddress);
+
+    // Aceitar uma conexão de cliente
+    sockaddr_in clientAddress{};
+    socklen_t clientAddressLength = sizeof(clientAddress);
+    // int clientSocket = accept(tcpSocket, (sockaddr*)&clientAddress, &clientAddressLength);
+    // if (clientSocket < 0) {
+    //     std::cerr << "Falha ao aceitar a conexão TCP" << std::endl;
+    //     close(tcpSocket);
+    //     return 1;
+    // }
+
+    // file_received.seekp(0);
+
+    while(true){
         int clientSocket = accept(tcpSocket, (sockaddr*)&clientAddress, &clientAddressLength);
         if (clientSocket < 0) {
             std::cerr << "Falha ao aceitar a conexão TCP" << std::endl;
             close(tcpSocket);
             return 1;
         }
-
         file_received.seekp(0);
-
         while (true) {
             // Buffer para armazenar os dados recebidos
             char buffer[BLOCK_SIZE];
@@ -59,7 +67,7 @@ int main(int argc, const char** argv) {
             // Receber dados do cliente
             ssize_t receivedBytes = recv(clientSocket, buffer, sizeof(buffer), 0);
             if (receivedBytes <= 0) {
-                close(clientSocket);
+                shutdown(clientSocket, SHUT_RDWR);
                 break;
             }
             

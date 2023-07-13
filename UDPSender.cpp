@@ -6,7 +6,7 @@
 #include <fstream>
 #include <cstring>
 
-const int BLOCK_TO_SEND = 100;
+const int BLOCK_TO_SEND = 1000;
 const int TIMEOUT_S = 5;
 
 int main(int argc, const char** argv){

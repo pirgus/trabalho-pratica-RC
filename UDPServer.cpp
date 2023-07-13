@@ -62,8 +62,8 @@ int main(int argc, const char** argv) {
         // std::cout << "Enviei resposta\n";
         if (sentBytes < 0) {
             // std::cerr << "Falha ao enviar a resposta UDP" << std::endl;
-            close(udpSocket);
-            return 1;
+            // close(udpSocket);
+            // return 1;
         }
     }
 

@@ -5,7 +5,7 @@
 #include <cstring>
 #include <fstream>
 
-const size_t BLOCK_SIZE = 100;
+const size_t BLOCK_SIZE = 500;
 
 int main(int argc, const char** argv) {
 

@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <fstream>
 
-const size_t BLOCK_SIZE = 500;
+const size_t BLOCK_SIZE = 1000;
 
 int main(int argc, const char** argv) {
     // Verificar se o nome do arquivo foi fornecido como argumento de linha de comando
